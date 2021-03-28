@@ -5,8 +5,9 @@ import shortid from 'shortid';
 const initialState = {
   contacts: [
     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'dffs sdfsdf', number: '459-12-56' },
-    { id: 'id-3', name: 'dsfdf sdfsd', number: '459-12-56' },
+    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ],
 
   inputForm: {
@@ -22,8 +23,20 @@ const initialState = {
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case 'contacts/addContact':
-      const name = state.inputForm.inputName;
-      const number = state.inputForm.inputNumber;
+      const inputName = state.inputForm.inputName;
+      const inputNumber = state.inputForm.inputNumber;
+
+      if (inputName.length === 0 || inputNumber.length === 0) {
+        alert('Empty fields');
+        return { ...state };
+      } else if (
+        state.contacts.find(
+          ({ name }) => name.toLowerCase() === inputName.toLowerCase(),
+        )
+      ) {
+        alert('Name allready exist');
+        return { ...state };
+      }
 
       return {
         ...state,
@@ -37,8 +50,8 @@ const reducer = (state = initialState, { type, payload }) => {
           ...state.contacts,
           {
             id: shortid(),
-            name,
-            number,
+            name: inputName,
+            number: inputNumber,
           },
         ],
       };
