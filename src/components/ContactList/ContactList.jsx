@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Conact from '../Contact';
 import { List } from '@material-ui/core';
 import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
-function ContactList({ contacts, filteredContacts }) {
+function ContactList({ contacts, filteredContacts, filter }) {
+  useEffect(() => {
+    filter();
+  }, [contacts]);
+
   return (
     <List>
-      {filteredContacts.length === 0
-        ? contacts.map(({ id, name, number }) => {
-            return <Conact key={id} id={id} name={name} number={number} />;
-          })
-        : filteredContacts.map(({ id, name, number }) => {
-            return <Conact key={id} id={id} name={name} number={number} />;
-          })}
+      {filteredContacts.map(({ id, name, number }) => {
+        return <Conact key={id} id={id} name={name} number={number} />;
+      })}
     </List>
   );
 }
@@ -24,4 +25,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(ContactList);
+const mapDispatchToProps = dispatch => {
+  return {
+    filter: () => dispatch(actions.filter()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

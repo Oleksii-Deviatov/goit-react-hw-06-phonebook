@@ -6,7 +6,6 @@ import * as actions from '../../redux/actions';
 function Filter({ inputFilter, setInputFilter, filter }) {
   function inputFilterHendler({ target: { value } }) {
     setInputFilter(value);
-
     filter();
   }
 

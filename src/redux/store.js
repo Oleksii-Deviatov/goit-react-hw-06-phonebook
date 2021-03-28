@@ -22,14 +22,23 @@ const initialState = {
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case 'contacts/addContact':
+      const name = state.inputForm.inputName;
+      const number = state.inputForm.inputNumber;
+
       return {
         ...state,
+
+        inputForm: {
+          inputName: '',
+          inputNumber: '',
+        },
+
         contacts: [
           ...state.contacts,
           {
             id: shortid(),
-            name: state.inputForm.inputName,
-            number: state.inputForm.inputNumber,
+            name,
+            number,
           },
         ],
       };
@@ -65,11 +74,12 @@ const reducer = (state = initialState, { type, payload }) => {
       };
 
     case 'filteredContacts/filter':
+      const filtered = state.contacts.filter(({ name }) =>
+        name.toLowerCase().includes(state.filter.toLowerCase()),
+      );
       return {
         ...state,
-        filteredContacts: state.contacts.filter(({ name }) =>
-          name.toLowerCase().includes(state.filter.toLowerCase()),
-        ),
+        filteredContacts: [...filtered],
       };
 
     default:
