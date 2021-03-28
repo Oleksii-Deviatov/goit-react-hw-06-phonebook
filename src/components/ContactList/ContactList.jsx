@@ -1,48 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Conact from '../Contact';
 import { List } from '@material-ui/core';
+import { connect } from 'react-redux';
 
-function ContactList({ contacts, filterContacts, delContact }) {
+function ContactList({ contacts, filteredContacts }) {
   return (
     <List>
-      {filterContacts()
-        ? filterContacts().map(({ id, name, number }) => {
-            return (
-              <Conact
-                key={id}
-                id={id}
-                name={name}
-                number={number}
-                delContact={delContact}
-              />
-            );
+      {filteredContacts.length === 0
+        ? contacts.map(({ id, name, number }) => {
+            return <Conact key={id} id={id} name={name} number={number} />;
           })
-        : contacts.map(({ id, name, number }) => {
-            return (
-              <Conact
-                key={id}
-                id={id}
-                name={name}
-                number={number}
-                delContact={delContact}
-              />
-            );
+        : filteredContacts.map(({ id, name, number }) => {
+            return <Conact key={id} id={id} name={name} number={number} />;
           })}
     </List>
   );
 }
 
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  filterContacts: PropTypes.func.isRequired,
-  delContact: PropTypes.func.isRequired,
+const mapStateToProps = state => {
+  return {
+    contacts: state.contacts,
+    filteredContacts: state.filteredContacts,
+  };
 };
 
-export default ContactList;
+export default connect(mapStateToProps, null)(ContactList);

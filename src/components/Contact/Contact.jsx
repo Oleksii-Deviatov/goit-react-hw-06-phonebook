@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Card,
   CardContent,
@@ -9,6 +8,8 @@ import {
 } from '@material-ui/core';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
 const useStyles = makeStyles({
   listItem: {
@@ -45,11 +46,10 @@ function Conact({ id, name, number, delContact }) {
   );
 }
 
-Conact.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
-  delContact: PropTypes.func.isRequired,
+const mapDispatchToProps = dispatch => {
+  return {
+    delContact: value => dispatch(actions.delContact(value)),
+  };
 };
 
-export default Conact;
+export default connect(null, mapDispatchToProps)(Conact);

@@ -1,49 +1,30 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import shortid from 'shortid';
+import React from 'react';
 import { TextField, Button, Box } from '@material-ui/core';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
-function ContactForm({ setContacts, contacts }) {
-  const [inputName, setInputName] = useState('');
-
+function ContactForm({
+  inputName,
+  inputNumber,
+  setInputName,
+  setInputNumber,
+  addContact,
+}) {
   function inputNameHandler({ target: { value } }) {
     setInputName(value);
   }
-
-  const [inputNumber, setInputNumber] = useState('');
 
   function inputNumberHendler({ target: { value } }) {
     setInputNumber(value);
   }
 
-  function submitHandler(e) {
+  function submitHendler(e) {
     e.preventDefault();
-    if (inputName === '') {
-      return;
-    }
-    if (
-      contacts.find(
-        ({ name }) => name.toLowerCase() === inputName.toLowerCase(),
-      )
-    ) {
-      alert(`${inputName} already exist`);
-      return;
-    }
-
-    setContacts(prevState => [
-      ...prevState,
-      {
-        id: shortid(),
-        name: inputName,
-        number: inputNumber,
-      },
-    ]);
-    setInputName('');
-    setInputNumber('');
+    addContact();
   }
 
   return (
-    <form onSubmit={submitHandler} autoComplete="off">
+    <form onSubmit={submitHendler} autoComplete="off">
       <Box display="flex" flexDirection="column">
         <TextField
           id="standard-basic"
@@ -67,15 +48,19 @@ function ContactForm({ setContacts, contacts }) {
   );
 }
 
-ContactForm.propTypes = {
-  setContacts: PropTypes.func.isRequired,
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
+const mapStateToProps = state => {
+  return {
+    inputName: state.inputForm.inputName,
+    inputNumber: state.inputForm.inputNumber,
+  };
 };
 
-export default ContactForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    setInputName: value => dispatch(actions.setInputName(value)),
+    setInputNumber: value => dispatch(actions.setInputNumber(value)),
+    addContact: () => dispatch(actions.addContact()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

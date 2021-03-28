@@ -1,10 +1,13 @@
 import React from 'react';
 import { TextField, Box } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
-function Filter({ setFind, find }) {
-  function inputFindHendler({ target: { value } }) {
-    setFind(value);
+function Filter({ inputFilter, setInputFilter, filter }) {
+  function inputFilterHendler({ target: { value } }) {
+    setInputFilter(value);
+
+    filter();
   }
 
   return (
@@ -13,8 +16,8 @@ function Filter({ setFind, find }) {
         <TextField
           id="standard-basic"
           label="find contact by name"
-          value={find}
-          onChange={inputFindHendler}
+          value={inputFilter}
+          onChange={inputFilterHendler}
           margin="dense"
         />
       </Box>
@@ -22,9 +25,17 @@ function Filter({ setFind, find }) {
   );
 }
 
-Filter.propTypes = {
-  setFind: PropTypes.func.isRequired,
-  find: PropTypes.string.isRequired,
+const mapStateToProps = state => {
+  return {
+    inputFilter: state.filter,
+  };
 };
 
-export default Filter;
+const mapDispatchToProps = dispatch => {
+  return {
+    setInputFilter: value => dispatch(actions.setInputFilter(value)),
+    filter: () => dispatch(actions.filter()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
