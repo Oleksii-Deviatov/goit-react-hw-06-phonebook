@@ -3,21 +3,40 @@ import { TextField, Button, Box } from '@material-ui/core';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/contacts/contacts-actions';
 
-function ContactForm({ addContact }) {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+function ContactForm({ contacts, addContact }) {
+  const [inputName, setInputName] = useState('');
+  const [inputNumber, setInputNumber] = useState('');
 
   function inputNameHandler({ target: { value } }) {
-    setName(value);
+    setInputName(value);
   }
 
   function inputNumberHendler({ target: { value } }) {
-    setNumber(value);
+    setInputNumber(value);
+  }
+
+  function clrForm() {
+    setInputName('');
+    setInputNumber('');
   }
 
   function submitHendler(e) {
     e.preventDefault();
-    addContact({ name, number });
+    if (inputName === '') {
+      return;
+    }
+
+    if (
+      contacts.find(
+        ({ name }) => name.toLowerCase() === inputName.toLowerCase(),
+      )
+    ) {
+      alert(`${inputName} already exist`);
+      return;
+    }
+
+    addContact({ name: inputName, number: inputNumber });
+    clrForm();
   }
 
   return (
@@ -26,14 +45,14 @@ function ContactForm({ addContact }) {
         <TextField
           id="standard-basic"
           label="Name"
-          value={name}
+          value={inputName}
           onChange={inputNameHandler}
           margin="dense"
         />
         <TextField
           id="standard-basic"
           label="Number"
-          value={number}
+          value={inputNumber}
           onChange={inputNumberHendler}
           margin="dense"
         />
@@ -45,10 +64,10 @@ function ContactForm({ addContact }) {
   );
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addContact: data => dispatch(actions.addContact(data)),
-  };
-};
+const mapStateToProps = ({ contacts }) => ({ contacts });
 
-export default connect(null, mapDispatchToProps)(ContactForm);
+const mapDispatchToProps = dispatch => ({
+  addContact: data => dispatch(actions.addContact(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
