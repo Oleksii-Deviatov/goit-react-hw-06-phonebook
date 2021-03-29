@@ -7,24 +7,15 @@ import {
   CardActionArea,
 } from '@material-ui/core';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
-import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/contacts/contacts-actions';
-
-const useStyles = makeStyles({
-  listItem: {
-    '&:not(:last-child)': {
-      marginBottom: 10,
-    },
-  },
-});
+import styles from './styles.module.css';
+import ListItem from '@material-ui/core/ListItem';
 
 function Conact({ id, name, number, delContact }) {
-  const classes = useStyles();
-
   return (
-    <li className={classes.listItem}>
-      <Card variant="outlined">
+    <ListItem disableGutters={true}>
+      <Card variant="outlined" className={styles.card}>
         <CardActionArea>
           <CardContent>
             <Box display="flex" justifyContent="space-between">
@@ -42,7 +33,7 @@ function Conact({ id, name, number, delContact }) {
           </CardContent>
         </CardActionArea>
       </Card>
-    </li>
+    </ListItem>
   );
 }
 
