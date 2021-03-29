@@ -22,21 +22,26 @@ function ContactForm({ contacts, addContact }) {
 
   function submitHendler(e) {
     e.preventDefault();
-    if (inputName === '') {
-      return;
-    }
 
-    if (
-      contacts.find(
+    function checkExistContact() {
+      return !!contacts.find(
         ({ name }) => name.toLowerCase() === inputName.toLowerCase(),
-      )
-    ) {
-      alert(`${inputName} already exist`);
-      return;
+      );
     }
 
-    addContact({ name: inputName, number: inputNumber });
-    clrForm();
+    switch (true) {
+      case inputName === '':
+        return;
+
+      case checkExistContact():
+        alert(`${inputName} already exist`);
+        return;
+
+      default:
+        addContact({ name: inputName, number: inputNumber });
+        clrForm();
+        break;
+    }
   }
 
   return (
