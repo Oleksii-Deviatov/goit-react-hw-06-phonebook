@@ -66,8 +66,10 @@ function ContactForm({ contacts, addContact }) {
 
 const mapStateToProps = ({ contacts }) => ({ contacts });
 
-const mapDispatchToProps = dispatch => ({
-  addContact: data => dispatch(actions.addContact(data)),
-});
+const mapDispatchToProps = dispatch => {
+  return {
+    addContact: data => dispatch(actions.addContact(data)),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

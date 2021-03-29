@@ -34,4 +34,7 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
+console.log(process.env.NODE_ENV);
+console.log(process.env.NODE_ENV === 'development');
+
 export { store, persistor };
