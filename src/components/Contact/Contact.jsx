@@ -9,7 +9,7 @@ import {
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/actions';
+import * as actions from '../../redux/contacts/contacts-actions';
 
 const useStyles = makeStyles({
   listItem: {

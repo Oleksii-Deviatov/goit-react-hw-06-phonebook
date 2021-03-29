@@ -1,26 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Box } from '@material-ui/core';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/actions';
+import * as actions from '../../redux/contacts/contacts-actions';
 
-function ContactForm({
-  inputName,
-  inputNumber,
-  setInputName,
-  setInputNumber,
-  addContact,
-}) {
+function ContactForm({ addContact }) {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
   function inputNameHandler({ target: { value } }) {
-    setInputName(value);
+    setName(value);
   }
 
   function inputNumberHendler({ target: { value } }) {
-    setInputNumber(value);
+    setNumber(value);
   }
 
   function submitHendler(e) {
     e.preventDefault();
-    addContact();
+    addContact({ name, number });
   }
 
   return (
@@ -29,14 +26,14 @@ function ContactForm({
         <TextField
           id="standard-basic"
           label="Name"
-          value={inputName}
+          value={name}
           onChange={inputNameHandler}
           margin="dense"
         />
         <TextField
           id="standard-basic"
           label="Number"
-          value={inputNumber}
+          value={number}
           onChange={inputNumberHendler}
           margin="dense"
         />
@@ -48,19 +45,10 @@ function ContactForm({
   );
 }
 
-const mapStateToProps = state => {
-  return {
-    inputName: state.inputForm.inputName,
-    inputNumber: state.inputForm.inputNumber,
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
-    setInputName: value => dispatch(actions.setInputName(value)),
-    setInputNumber: value => dispatch(actions.setInputNumber(value)),
-    addContact: () => dispatch(actions.addContact()),
+    addContact: data => dispatch(actions.addContact(data)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
+export default connect(null, mapDispatchToProps)(ContactForm);
